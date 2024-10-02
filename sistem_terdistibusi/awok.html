@@ -1,0 +1,25 @@
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value;
+  
+    if (message.trim() === '') return; // Jangan kirim jika pesan kosong
+  
+    // Cek apakah WebSocket dalam status OPEN sebelum mengirim
+    if (ws.readyState === WebSocket.OPEN) {
+      // Kirim pesan ke server dalam format JSON
+      ws.send(JSON.stringify({ message }));
+  
+      // Tampilkan pesan yang dikirim di UI
+      const chatMessagesDiv = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message', 'sent');
+      messageDiv.textContent = message; // Mengatur teks untuk pesan yang dikirim
+      chatMessagesDiv.appendChild(messageDiv);
+      chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; // Scroll ke bawah
+  
+      messageInput.value = ''; // Kosongkan input setelah pengiriman
+    } else {
+      console.error("WebSocket is not open: unable to send message");
+    }
+  }
+  
